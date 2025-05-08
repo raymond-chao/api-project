@@ -11,9 +11,12 @@ const API = () => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lives, setLives] = useState(3);
+  const [score, setScore] = useState(0);
+  const [timer, setTimer] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch trivia questions from API
   const fetchData = async () => {
     try {
       const response = await fetch("https://opentdb.com/api.php?amount=10&type=boolean");
@@ -22,6 +25,8 @@ const API = () => {
         setQuestions(data.results);
         setCurrentIndex(0);
         setLives(3);
+        setScore(0);
+        setTimer(0);
         setGameOver(false);
         setError(null);
       } else {
@@ -37,21 +42,42 @@ const API = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (gameOver || questions.length === 0 || currentIndex >= questions.length) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, gameOver, questions]);
+
   const handleAnswer = (userAnswer) => {
     if (gameOver || currentIndex >= questions.length) return;
 
     const correctAnswer = questions[currentIndex].correct_answer;
 
     if (userAnswer === correctAnswer) {
-      setCurrentIndex((prev) => prev + 1);
+      setScore((prev) => prev + 1);
     } else {
-      if (lives > 1) {
-        setLives((prev) => prev - 1);
-        setCurrentIndex((prev) => prev + 1);
-      } else {
-        setLives(0);
-        setGameOver(true);
-      }
+      setLives((prev) => prev - 1);
+    }
+
+    nextQuestion();
+  };
+
+  const nextQuestion = () => {
+    if (lives <= 0) {
+      setGameOver(true);
+      return;
+    }
+
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < questions.length) {
+      setCurrentIndex(nextIndex);
+      setTimer(0);
+    } else {
+      setGameOver(true);
     }
   };
 
@@ -61,8 +87,8 @@ const API = () => {
 
   return (
     <div className="trivia-container">
-      <h2 className="trivia-text">Trivia Game</h2>
-      <p>❤️ Lives: {lives}</p>
+      <h2>Trivia Game</h2>
+      <p>❤️ Lives: {lives} | ⏱️ Time Taken: {timer}s | 🎯 Score: {score}</p>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
