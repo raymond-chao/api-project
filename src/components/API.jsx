@@ -61,7 +61,7 @@ const API = () => {
 
   return (
     <div className="trivia-container">
-      <h2>Trivia Game</h2>
+      <h2 className="trivia-text">Trivia Game</h2>
       <p>❤️ Lives: {lives}</p>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -78,10 +78,10 @@ const API = () => {
           <p className="trivia-question">
             {decodeHTML(questions[currentIndex].question)}
           </p>
-          <button className="trivia-button" onClick={() => handleAnswer("True")}>
+          <button className="trivia-button-true" onClick={() => handleAnswer("True")}>
             True
           </button>
-          <button className="trivia-button" onClick={() => handleAnswer("False")}>
+          <button className="trivia-button-false" onClick={() => handleAnswer("False")}>
             False
           </button>
         </div>
