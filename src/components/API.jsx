@@ -16,7 +16,6 @@ const API = () => {
   const [gameOver, setGameOver] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch trivia questions from API
   const fetchData = async () => {
     try {
       const response = await fetch("https://opentdb.com/api.php?amount=10&type=boolean");
@@ -87,9 +86,9 @@ const API = () => {
 
   return (
     <div className="trivia-container">
-      <h2>Trivia Game</h2>
-      <p>❤️ Lives: {lives} | ⏱️ Time Taken: {timer}s | 🎯 Score: {score}</p>
-
+        <h2 className="trivia-text">Trivia Game</h2>
+        <p>General knowledge quiz, you have 3 lives</p>
+        <p>❤️ Lives: {lives} | ⏳ Time: {timer}s | 🎯 Score: {score}</p>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {gameOver ? (
