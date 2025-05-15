@@ -25,7 +25,7 @@ const API = () => {
         setCurrentIndex(0);
         setLives(3);
         setScore(0);
-        setTimer(0);
+        setTimer(10);
         setGameOver(false);
         setError(null);
       } else {
@@ -45,7 +45,7 @@ const API = () => {
     if (gameOver || questions.length === 0 || currentIndex >= questions.length) return;
 
     const interval = setInterval(() => {
-      setTimer((prev) => prev + 1);
+      setTimer((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -74,7 +74,7 @@ const API = () => {
     const nextIndex = currentIndex + 1;
     if (nextIndex < questions.length) {
       setCurrentIndex(nextIndex);
-      setTimer(0);
+      setTimer(10);
     } else {
       setGameOver(true);
     }
